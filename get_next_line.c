@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mprudhom <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/25 14:32:05 by mprudhom          #+#    #+#             */
+/*   Updated: 2019/09/18 03:48:56 by mprudhom         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 static int	get_line(char **s, char **line)
 {
-	int	len;
+	int		len;
 	char	*tmp;
 
 	len = 0;
@@ -15,7 +27,7 @@ static int	get_line(char **s, char **line)
 		free(*s);
 		*s = tmp;
 	}
-	else 
+	else
 	{
 		*line = ft_strdup(*s);
 		ft_strdel(s);
@@ -27,17 +39,16 @@ static int	get_output(char **s, char **line, int ret, int fd)
 {
 	if (ret < 0)
 		return (-1);
-	else if (ret == 0 || s[fd] == NULL)
-		return (0);
-	else
+	else if (s[fd] && *s[fd])
 		return (get_line(&s[fd], line));
+	return (0);
 }
 
-int		get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
-	int	ret;
-	char	buf[BUFF_SIZE + 1];
-	char	*tmp;
+	int			ret;
+	char		*tmp;
+	char		buf[BUFF_SIZE + 1];
 	static char	*s[BUFF_SIZE];
 
 	if (fd < 0 || line == NULL)
@@ -45,7 +56,6 @@ int		get_next_line(const int fd, char **line)
 	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[ret] = '\0';
-		//printf("buf = %s\n", buf);
 		if (s[fd] == NULL)
 			s[fd] = ft_strdup(buf);
 		else
@@ -58,27 +68,4 @@ int		get_next_line(const int fd, char **line)
 			break ;
 	}
 	return (get_output(s, line, ret, fd));
-}
-
-
-int   main(int ac, char **av)
-{
-  char *line;
-    int fd;
-
-	fd = open(av[1], O_RDONLY);
-//	printf("fd = %d\n", fd);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	get_next_line(fd, &line);
-	printf("%s\n", line);
-	return (0);
 }
