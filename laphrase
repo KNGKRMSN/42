@@ -1,0 +1,1 @@
+gcc -g -fsanitize=address fillit.h main.c read.c checks.c libft.a
