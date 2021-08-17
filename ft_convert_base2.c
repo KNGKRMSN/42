@@ -6,7 +6,7 @@
 /*   By: mprud-ho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 19:19:59 by mprud-ho          #+#    #+#             */
-/*   Updated: 2021/08/12 20:06:38 by mprud-ho         ###   ########.fr       */
+/*   Updated: 2021/08/17 17:57:06 by mprud-ho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	ft_size(int res, char *base_to)
 	int	i;
 
 	i = 0;
+	if (res < 0)
+		res = -res;
 	while (res)
 	{
 		res = res / ft_slen(base_to);
@@ -37,7 +39,7 @@ int	ft_size(int res, char *base_to)
 	}
 	return (i);
 }
-
+/*
 char	*ft_strrev(char *str)
 {
 	int		i;
@@ -46,6 +48,7 @@ char	*ft_strrev(char *str)
 
 	i = 0;
 	j = ft_slen(str) - 1;
+	printf("%c\n", str[j]);
 	while (i <= j)
 	{
 		c = str[i];
@@ -54,5 +57,7 @@ char	*ft_strrev(char *str)
 		i++;
 		j--;
 	}
+	i *= 2;
+	str[i ] = '\0';
 	return (str);
-}
+}*/

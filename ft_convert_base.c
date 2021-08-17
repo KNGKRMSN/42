@@ -6,7 +6,7 @@
 /*   By: mprud-ho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 14:25:09 by mprud-ho          #+#    #+#             */
-/*   Updated: 2021/08/16 17:36:30 by mprud-ho         ###   ########.fr       */
+/*   Updated: 2021/08/17 20:37:38 by mprud-ho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,32 +86,30 @@ int	ft_atoi_base(char *str, char *base)
 	return (res * neg);
 }
 
-char	*ft_putnbr_base(int nbr, char *base, char *nb_final)
+int	ft_putnbr_base(int nbr, char *base, char *nb_final, int index)
 {
 	int				i;
 	unsigned int	jerome;
+	int				len;
 
 	i = 0;
+	len = 0;
+	while (base[len])
+		len++;
 	jerome = (unsigned int)nbr;
 	if (check(base))
 	{
+		printf("hey");
 		if (nbr < 0)
 		{
+			nb_final[index++] = '-';
 			jerome = -jerome;
 		}
-		if (jerome >= 0)
-		{
-			while (jerome)
-			{
-				nb_final[i] = base[jerome % ft_slen(base)];
-				jerome = jerome / ft_slen(base);
-				i++;
-			}
-		}
+		if (jerome >= len)
+			ft_putnbr_base(jerome / len, base, nb_final, index - 1);
+		nb_final[index] = base[jerome % len];
 	}
-	if (nbr < 0)
-		nb_final[i] = '-';
-	return (nb_final);
+	return (index);
 }
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
@@ -119,12 +117,16 @@ char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 	char	*nb_final;
 	int		res;
 	int		nb;
+	int		i;
 
 	res = ft_atoi_base(nbr, base_from);
 	if (!check(base_from) || !check(base_to))
 		return (NULL);
 	nb = ft_size(res, base_to);
-	nb_final = malloc(sizeof(char) * nb);
+	printf("%d\n", nb);
+	if (res < 0)
+		nb_final = malloc(sizeof(char) * nb + 2);
+	nb_final = malloc(sizeof(char) * nb + 1);
 	if (!(nb_final))
 		return (NULL);
 	if (res == 0)
@@ -132,8 +134,10 @@ char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 		nb_final[0] = base_to[0];
 		return (nb_final);
 	}
-	ft_putnbr_base(res, base_to, nb_final);
-	return (ft_strrev(nb_final));
+	printf("%d\n", nb);
+	i = ft_putnbr_base(res, base_to, nb_final, nb);
+	nb_final[i + 1] = '\0';
+	return (nb_final);
 }
 
 int main(int ac, char **av)
